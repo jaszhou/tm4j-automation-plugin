@@ -68,7 +68,12 @@ public class JiraCloudInstance extends Instance {
     public Boolean isValidCredentials() {
         try {
             final String url = MessageFormat.format(HEALTH_CHECK_ENDPOINT, API_BASE_URL);
+            HttpHost proxy = new HttpHost(System.getProperty("https.proxyHost")
+            , new Integer(System.getProperty("https.proxyPort")));
 
+            LOGGER.log(Level.WARNING, "Setting proxy host: " + System.getProperty("https.proxyHost") + " and port: " + System.getProperty("https.proxyPort"));
+                        
+            Unirest.setProxy(proxy);     
             final HttpResponse<String> response = Unirest.get(url)
                 .header("Authorization", "Bearer " + getDecryptedJwt())
                 .asString();
@@ -110,6 +115,13 @@ public class JiraCloudInstance extends Instance {
     public HttpResponse<String> downloadFeatureFile(final String projectKey) throws UnirestException {
         String url = MessageFormat.format(FEATURE_FILES_ENDPOINT, API_BASE_URL);
 
+        HttpHost proxy = new HttpHost(System.getProperty("https.proxyHost")
+        , new Integer(System.getProperty("https.proxyPort")));
+
+        LOGGER.log(Level.WARNING, "Setting proxy host: " + System.getProperty("https.proxyHost") + " and port: " + System.getProperty("https.proxyPort"));
+                
+        Unirest.setProxy(proxy);     
+
         return Unirest.get(url)
             .header("Authorization", "Bearer " + getDecryptedJwt())
             .header("Accept", "application/zip")
@@ -148,6 +160,13 @@ public class JiraCloudInstance extends Instance {
     private HttpResponse<JsonNode> exportResultsFile(final String url, final String projectKey, final Boolean autoCreateTestCases,
                                                      final File zip, final ExpandedCustomTestCycle expandedCustomTestCycle)
         throws UnirestException {
+
+            HttpHost proxy = new HttpHost(System.getProperty("https.proxyHost")
+            , new Integer(System.getProperty("https.proxyPort")));
+
+            LOGGER.log(Level.WARNING, "Setting proxy host: " + System.getProperty("https.proxyHost") + " and port: " + System.getProperty("https.proxyPort"));
+                        
+            Unirest.setProxy(proxy);     
         final MultipartBody body = Unirest.post(url)
             .header("Authorization", "Bearer " + getDecryptedJwt())
             .header("zscale-source", "Jenkins Plugin")
