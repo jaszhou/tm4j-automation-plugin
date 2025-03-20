@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -e
-mvn clean
+mvn clean install
+mvn hpi:hpi
 mvn hpi:run
